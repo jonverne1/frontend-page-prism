@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getProject } from '../services/project'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { deleteProject, getProject } from '../services/project'
 import Button from '../components/Button'
 import styles from './ProjectDetail.module.css'
 
 const ProjectDetail = () => {
   const [project, setProject] = useState(null)
   const { id } = useParams()
+  let navigate = useNavigate()
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -15,6 +16,17 @@ const ProjectDetail = () => {
     }
     fetchProject()
   }, [id])
+
+  const handleDelete = async () => {
+    try {
+      await deleteProject(id)
+      navigate('/projects')
+    } catch (err) {
+      //error deleting
+      //show to user
+      //dont navigate
+    }
+  }
 
   if (!project) {
     return <div>Loading...</div>
@@ -54,7 +66,9 @@ const ProjectDetail = () => {
         <Link to={`/projects/edit/${project.id}`}>
           <Button className={styles.editButton}>Edit Project</Button>
         </Link>
-        <Button className={styles.deleteButton}>Delete Project</Button>
+        <Button className={styles.deleteButton} onClick={handleDelete}>
+          Delete Project
+        </Button>
       </div>
     </div>
   )
