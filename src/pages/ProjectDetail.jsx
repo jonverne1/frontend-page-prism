@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getProject } from '../services/project'
 import Button from '../components/Button'
 import styles from './ProjectDetail.module.css'
@@ -51,7 +51,9 @@ const ProjectDetail = () => {
         )}
       </div>
       <div className={styles.buttonContainer}>
-        <Button className={styles.editButton}>Edit Project</Button>
+        <Link to={`/projects/edit/${project.id}`}>
+          <Button className={styles.editButton}>Edit Project</Button>
+        </Link>
         <Button className={styles.deleteButton}>Delete Project</Button>
       </div>
     </div>

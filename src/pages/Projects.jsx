@@ -24,7 +24,9 @@ const Projects = () => {
 
   return (
     <div>
-      <Button onClick={handleCreateProject}>Create New Project</Button>
+      <Link to={`/projects/create`}>
+        <Button>Create New Project</Button>
+      </Link>
       {projects.map((project) => (
         <div key={project.id} className="p-4 border-b border-gray-200">
           <Link to={`/projects/${project.id}`} className="block">
