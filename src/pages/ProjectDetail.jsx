@@ -3,6 +3,12 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { deleteProject, getProject } from '../services/project'
 import Button from '../components/Button'
 import styles from './ProjectDetail.module.css'
+import {
+  createInspiration,
+  deleteInspiration,
+  getInspirationsByProject,
+} from '../services/inspiration'
+import AddInspirationForm from '../forms/AddInspiratoinForm'
 
 const ProjectDetail = () => {
   const [project, setProject] = useState(null)
@@ -12,7 +18,9 @@ const ProjectDetail = () => {
   useEffect(() => {
     const fetchProject = async () => {
       const projectData = await getProject(id)
-      setProject(projectData)
+      const inspirations = await getInspirationsByProject(id)
+      console.log(inspirations)
+      setProject({ ...projectData, inspirations })
     }
     fetchProject()
   }, [id])
@@ -59,7 +67,10 @@ const ProjectDetail = () => {
             ))}
           </ul>
         ) : (
-          <p>No inspirations added yet.</p>
+          <AddInspirationForm
+            projectId={id}
+            onInspirationAdded={() => console.log('adding...')}
+          />
         )}
       </div>
       <div className={styles.buttonContainer}>
