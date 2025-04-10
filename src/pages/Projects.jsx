@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getAllProjects, createProject } from '../services/project'
 import Button from '../components/Button'
+import ProjectSearch from '../components/ProjectSearch'
 
 const Projects = () => {
   const [projects, setProjects] = useState([])
@@ -14,16 +15,9 @@ const Projects = () => {
     fetchProjects()
   }, [])
 
-  const handleCreateProject = async () => {
-    const newProject = await createProject({
-      name: 'New Project',
-      description: 'A new project description',
-    })
-    setProjects([...projects, newProject])
-  }
-
   return (
     <div>
+      {projects.length > 0 && <ProjectSearch projects={projects} />}
       <Link to={`/projects/create`}>
         <Button>Create New Project</Button>
       </Link>
