@@ -30,26 +30,6 @@ export const getScreenshot = async (websiteUri, date = null, options = {}) => {
 }
 
 /**
- * Returns a real screenshot-like image blob URL for https://example.com
- * Uses https://image.thum.io to simulate a screenshot.
- */
-export const mockGetScreenshot = async () => {
-  // Optional: simulate latency
-  await new Promise((res) => setTimeout(res, 300))
-
-  const screenshotUrl = 'https://image.thum.io/get/width/1280/crop/720/noanimate/https://example.com'
-
-  const response = await fetch(screenshotUrl)
-
-  if (!response.ok) {
-    throw new Error('Failed to fetch screenshot of https://example.com')
-  }
-
-  const blob = await response.blob()
-  return URL.createObjectURL(blob)
-}
-
-/**
  * Fetches metadata for a website screenshot.
  * @param {string} websiteUri - The URI of the website.
  * @param {string|null} date - Optional. The the metadata was captured (2024-01 - 2024-10).
@@ -72,39 +52,5 @@ export const getMetadata = async (websiteUri, date = null) => {
   } catch (error) {
     console.error('Error fetching metadata:', error)
     throw error
-  }
-}
-
-/**
- * Returns mock website metadata for https://example.com
- */
-export const mockGetMetadata = async () => {
-  await new Promise((res) => setTimeout(res, 300)) // Simulated latency
-
-  return {
-    url: 'https://example.com',
-    title: 'Example Domain',
-    description:
-      'This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.',
-    favicon: 'https://example.com/favicon.ico',
-    author: null,
-    date: null,
-    image: 'https://image.thum.io/get/width/1200/crop/630/noanimate/https://example.com',
-    logo: null,
-    publisher: 'IANA',
-    ogTitle: 'Example Domain',
-    ogDescription:
-      'Used in illustrative examples. Maintained by the Internet Assigned Numbers Authority (IANA).',
-    ogImage: [
-      {
-        url: 'https://image.thum.io/get/width/1200/crop/630/noanimate/https://example.com',
-        type: 'image/jpeg',
-      },
-    ],
-    ogLocale: 'en_US',
-    ogUrl: 'https://example.com',
-    charset: 'UTF-8',
-    urlRequested: 'https://example.com',
-    urlResolved: 'https://example.com',
   }
 }

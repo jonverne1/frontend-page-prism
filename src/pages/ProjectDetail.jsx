@@ -12,22 +12,22 @@ import AddInspirationForm from '../forms/AddInspiratoinForm'
 
 const ProjectDetail = () => {
   const [project, setProject] = useState(null)
-  const { id } = useParams()
+  const { id: projectId } = useParams()
   let navigate = useNavigate()
 
   useEffect(() => {
     const fetchProject = async () => {
-      const projectData = await getProject(id)
-      const inspirations = await getInspirationsByProject(id)
+      const projectData = await getProject(projectId)
+      const inspirations = await getInspirationsByProject(projectId)
       console.log(inspirations)
       setProject({ ...projectData, inspirations })
     }
     fetchProject()
-  }, [id])
+  }, [projectId])
 
   const handleDelete = async () => {
     try {
-      await deleteProject(id)
+      await deleteProject(projectId)
       navigate('/projects')
     } catch (err) {
       //error deleting
@@ -67,9 +67,12 @@ const ProjectDetail = () => {
             ))}
           </ul>
         ) : (
+          //todo: move the create logic and nav action to the routes file
           <AddInspirationForm
-            projectId={id}
-            onInspirationAdded={() => console.log('adding...')}
+            projectId={projectId}
+            onInspirationAdded={(newInspo) =>
+              navigate(`/projects/inspiration/${newInspo.id}`)
+            }
           />
         )}
       </div>

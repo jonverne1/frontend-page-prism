@@ -5,6 +5,7 @@ import Projects from './pages/Projects'
 import ProjectDetail from './pages/ProjectDetail'
 import CreateUpdateProjectForm from './forms/CreateUpdateProjectForm'
 import { updateOrCreateProject } from './actions/updateOrCreateProject'
+import InspirationDetail from './pages/InspirationDetail'
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         path: 'projects/edit/:id',
         element: <CreateUpdateProjectForm />,
         action: updateOrCreateProject,
+      },
+      {
+        path: 'projects/inspiration/:id',
+        element: <InspirationDetail />,
       },
     ],
   },

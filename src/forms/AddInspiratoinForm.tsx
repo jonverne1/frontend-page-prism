@@ -1,14 +1,9 @@
 import { useState } from 'react'
-import { useNavigation, Form } from 'react-router-dom'
-import { Dialog } from '@headlessui/react'
+import { Form } from 'react-router-dom'
+import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react'
 import { createInspiration } from '../services/inspiration'
-import {
-  getMetadata,
-  getScreenshot,
-  mockGetMetadata,
-  mockGetScreenshot,
-} from '../utils/api'
 import type { Inspiration } from '../models/schema'
+import { getWebsitePreview } from '../utils/screenshotApiThatWorks'
 
 interface AddInspirationFormProps {
   projectId: string
@@ -21,36 +16,33 @@ export default function AddInspirationForm({
 }: AddInspirationFormProps) {
   const [url, setUrl] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
-  const navigation = useNavigation()
-  const isSubmitting = navigation.state === 'submitting'
 
   const handleCreate = async () => {
+    setIsSubmitting(true)
     setError(null)
     try {
       const encodedUrl = encodeURIComponent(url)
-      const [metadata, screenshotUri] = await Promise.all([
-        // getMetadata(encodedUrl),
-        // getScreenshot(encodedUrl),
-        mockGetMetadata(),
-        mockGetScreenshot(),
-      ])
+      const { metadata, screenshotUrl } = await getWebsitePreview(encodedUrl)
 
       const newInspiration = await createInspiration({
         projectId,
         websiteMetadata: metadata,
-        screenshot_uri: screenshotUri,
+        screenshot_uri: screenshotUrl,
         notes: '',
       })
 
       onInspirationAdded?.(newInspiration)
-      setUrl('')
-      setIsOpen(false)
     } catch (err) {
       console.error(err)
       setError(
         'Could not fetch metadata or screenshot. Check the URL and try again.'
       )
+    } finally {
+      setIsSubmitting(false)
+      setUrl('')
+      setIsOpen(false)
     }
   }
 
@@ -70,10 +62,10 @@ export default function AddInspirationForm({
       >
         <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <Dialog.Panel className="bg-white max-w-md w-full rounded-xl p-6 shadow-lg">
-            <Dialog.Title className="text-lg font-semibold">
+          <DialogPanel className="bg-white max-w-md w-full rounded-xl p-6 shadow-lg">
+            <DialogTitle className="text-lg font-semibold">
               Add Website Inspiration
-            </Dialog.Title>
+            </DialogTitle>
 
             <Form
               method="post"
@@ -119,7 +111,7 @@ export default function AddInspirationForm({
                 </button>
               </div>
             </Form>
-          </Dialog.Panel>
+          </DialogPanel>
         </div>
       </Dialog>
     </>
