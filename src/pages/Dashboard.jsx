@@ -1,5 +1,7 @@
+import AskModal from '../components/AskQuestion'
+
 const Dashboard = () => {
-  return <div>Welcome to the Dashboard</div>
+  return <AskModal />
 }
 
 export default Dashboard
